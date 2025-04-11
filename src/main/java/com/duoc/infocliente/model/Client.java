@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 
 public class Client {
-    private int id;
+    private String id;
     private String username;
     private String name;
     private String email;
-    
+    private ProfileInfo profileinfo;
 }

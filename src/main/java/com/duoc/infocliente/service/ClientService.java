@@ -10,4 +10,7 @@ import com.duoc.infocliente.model.Client;
 public interface ClientService {
     List<Client> getAllClients();
     void createClient(Client client);
+    Client getClientById(String id);
+    void updateClient(String id, Client client);
+    void deleteClient(String id);
 }

@@ -18,4 +18,19 @@ public class ClientServiceImpl implements ClientService{
     public void createClient(Client client) {
         clientRepository.addClient(client);
     }
+
+    @Override
+    public Client getClientById(String id) {
+        return clientRepository.findClientById(id);
+    }
+
+    @Override
+    public void updateClient(String id, Client client) {
+        clientRepository.updateClient(id, client);
+    }
+
+    @Override
+    public void deleteClient(String id) {
+        clientRepository.deleteClient(id);
+    }
 }
