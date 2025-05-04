@@ -1,13 +1,20 @@
 package com.duoc.infocliente.service;
+import java.lang.foreign.Linker.Option;
+import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.duoc.infocliente.model.Client;
 import com.duoc.infocliente.repository.ClientRepository;
-import java.util.List;
+import com.duoc.infocliente.exceptionhandler.*;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 public class ClientServiceImpl implements ClientService{
-    private final ClientRepository clientRepository = new ClientRepository();
+    @Autowired
+    private ClientRepository clientRepository;
 
     @Override
     public List<Client> getAllClients(){
@@ -15,22 +22,30 @@ public class ClientServiceImpl implements ClientService{
     }
 
     @Override
-    public void createClient(Client client) {
-        clientRepository.addClient(client);
+    public Client saveClient(Client client) {
+
+        return clientRepository.save(client);
+            
     }
 
     @Override
-    public Client getClientById(String id) {
-        return clientRepository.findClientById(id);
+    public Optional<Client> getClientById(Long id) {
+        return clientRepository.findById(id);
     }
 
     @Override
-    public void updateClient(String id, Client client) {
-        clientRepository.updateClient(id, client);
+    public Client updateClient(Long id, Client client) {
+
+        if(clientRepository.existsById(id)){
+            client.setId(id);
+            return clientRepository.save(client);
+        }   else {
+            return null;
+        }
     }
 
     @Override
-    public void deleteClient(String id) {
-        clientRepository.deleteClient(id);
+    public void deleteClientById(Long id) {
+        clientRepository.deleteById(id);
     }
 }

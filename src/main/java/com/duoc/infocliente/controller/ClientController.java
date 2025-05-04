@@ -1,11 +1,13 @@
 package com.duoc.infocliente.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.duoc.infocliente.service.ClientService;
 
@@ -39,24 +41,24 @@ public class ClientController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Client> getUserById(@PathVariable String id) {
-        Client client = clientService.getClientById(id);
-        if (client == null) {
+    public ResponseEntity<Client> getUserById(@PathVariable Long id) {
+        Optional<Client> client = clientService.getClientById(id);
+        if (client.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(client);
+        return ResponseEntity.ok(client.get());
     }
 
 
     @PostMapping
     public ResponseEntity<Void> createClientEntity(@RequestBody Client client) {
-        clientService.createClient(client);
+        clientService.saveClient(client);
         
         return ResponseEntity.status(201).build();
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<Client> updateClient(@PathVariable String id, @RequestBody Client client) {
+    public ResponseEntity<Client> updateClient(@PathVariable Long id, @RequestBody Client client) {
         if (!id.equals(client.getId()) || clientService.getClientById(id).equals(client) || 
             clientService.getClientById(id) == null ){
             return ResponseEntity.badRequest().build();
@@ -66,11 +68,11 @@ public class ClientController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteClient(@PathVariable String id) {
+    public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
         if(clientService.getClientById(id) == null) {
             return ResponseEntity.badRequest().build(); 
         }
-        clientService.deleteClient(id);
+        clientService.deleteClientById(id);
         return ResponseEntity.ok().build();
     }
 
